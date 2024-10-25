@@ -3,20 +3,23 @@ import SwiftUI
 struct SearchView: View {
     @State private var searchText: String = ""
     @State private var selectedMovie: Movie? // Assuming you have a Movie model
+    @StateObject private var viewModel = MovieViewModel()
 
-    let movies: [Movie] = [
-        Movie(title: "Movie 1"),
-        Movie(title: "Movie 2"),
-        Movie(title: "Movie 3"),
-        Movie(title: "Movie 4"),
-        Movie(title: "Movie 5")
-    ] // Placeholder movie data
+    
+
+//    let movies: [Movie] = [
+//        Movie(title: "Movie 1"),
+//        Movie(title: "Movie 2"),
+//        Movie(title: "Movie 3"),
+//        Movie(title: "Movie 4"),
+//        Movie(title: "Movie 5")
+//    ] // Placeholder movie data
 
     var filteredMovies: [Movie] {
         if searchText.isEmpty {
             return []
         }
-        return movies.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
+        return viewModel.movies.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
     }
 
     var body: some View {
@@ -60,7 +63,7 @@ struct GridView: View {
         ]
         
         LazyVGrid(columns: columns, spacing: 20) {
-            ForEach(movies, id: \.self) { movie in
+            ForEach(movies, id: \.id) { movie in
                 VStack {
                     Rectangle()
                         .fill(Color.gray)
@@ -78,18 +81,11 @@ struct GridView: View {
         }
         .padding()
         .sheet(isPresented: $showMovieDetails) {
-            MovieDetailsView(cardNumber: 0) // Pass the selected card to details
+            MovieDetailsView(movie: movies[0])
         }
     }
     
 }
-
-// Placeholder Movie model
-struct Movie: Identifiable, Hashable {
-    let id = UUID()
-    let title: String
-}
-
 
 struct SearchView_Previews: PreviewProvider {
     static var previews: some View {

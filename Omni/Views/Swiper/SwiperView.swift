@@ -1,60 +1,47 @@
-//
-//  ContentView.swift
-//  WeSplit
-//
-//  Created by Charles Oller on 10/23/24.
-//
-
 import SwiftUI
 
 struct SwiperView: View {
     @Environment(\.colorScheme) var colorScheme
+    @StateObject private var viewModel = MovieViewModel()
 
-    // Variables to track the current card's position
     @State private var scaleEffect: CGFloat = 1.0
     @State private var offset = CGSize.zero
     @State private var rotation: Double = 0
     @State private var isSwiped = false
     
     @State private var showMovieDetails = false
-    @State private var selectedCard: Int? = nil  // To track the card being long pressed
-    
-    // List of cards (placeholders for now)
-    @State private var cards = Array(1...5)  // Example card identifiers
-    
-    
-    
+    @State private var selectedCard: Int? = nil
+
     var body: some View {
         VStack {
             ZStack {
-                // Loop through the list of cards and display the topmost one
-                ForEach(cards, id: \.self) { card in
-                    MovieCardView(cardNumber: card)
-                        .scaleEffect(isTopCard(card: card) ? scaleEffect : 1.0) // Apply scale effect conditionally
-                        .offset(x: isTopCard(card: card) ? offset.width : 0, y: isTopCard(card: card) ? offset.height : 0)
-                        .rotationEffect(isTopCard(card: card) ? .degrees(rotation) : .zero)
-                        .scaleEffect(isTopCard(card: card) ? 1.0 : 0.95)  // Slight scale for cards behind
-                        .opacity(isTopCard(card: card) ? 1.0 : 0.5)  // Faded opacity for back cards
-                        .zIndex(isTopCard(card: card) ? 1 : 0)  // Top card appears on top
+                ForEach(viewModel.movies, id: \.id) { movie in
+                    MovieCardView(movie: movie) // Update to use Movie object
+                        .scaleEffect(isTopCard(movie: movie) ? scaleEffect : 1.0)
+                        .offset(x: isTopCard(movie: movie) ? offset.width : 0, y: isTopCard(movie: movie) ? offset.height : 0)
+                        .rotationEffect(isTopCard(movie: movie) ? .degrees(rotation) : .zero)
+                        .scaleEffect(isTopCard(movie: movie) ? 1.0 : 0.95)
+                        .opacity(isTopCard(movie: movie) ? 1.0 : 0.5)
+                        .zIndex(isTopCard(movie: movie) ? 1 : 0)
                         .gesture(
-                            LongPressGesture(minimumDuration: 1.0) // Long press gesture to show details
+                            LongPressGesture(minimumDuration: 1.0)
                                 .onEnded { _ in
-                                    if isTopCard(card: card) {
-                                        selectedCard = card
+                                    if isTopCard(movie: movie) {
+                                        selectedCard = Int(movie.id)
                                         showMovieDetails = true
                                     }
                                 }
                                 .simultaneously(with:
                                     DragGesture()
                                         .onChanged { gesture in
-                                            if isTopCard(card: card) {
+                                            if isTopCard(movie: movie) {
                                                 scaleEffect = 1.05
                                                 offset = gesture.translation
                                                 rotation = Double(gesture.translation.width / 20)
                                             }
                                         }
                                         .onEnded { gesture in
-                                            if isTopCard(card: card) {
+                                            if isTopCard(movie: movie) {
                                                 scaleEffect = 1
                                                 if abs(gesture.translation.width) > 100 {
                                                     if gesture.translation.width > 0 {
@@ -74,18 +61,18 @@ struct SwiperView: View {
             }
         }
         .sheet(isPresented: $showMovieDetails) {
-            MovieDetailsView(cardNumber: selectedCard ?? 0) // Pass the selected card to details
+            MovieDetailsView(movie: viewModel.movies[0])
+        }
+        .onAppear {
+            viewModel.fetchMovies()
         }
     }
     
-    // Check if the card is the topmost one in the stack
-    private func isTopCard(card: Int) -> Bool {
-        return card == cards.first
+    private func isTopCard(movie: Movie) -> Bool {
+        return movie.id == viewModel.movies.first?.id
     }
     
-    // Swipe card off screen function
     func swipeCard(to direction: SwipeDirection) {
-        // Move the card off screen depending on direction
         switch direction {
         case .left:
             offset = CGSize(width: -1000, height: 0)
@@ -93,32 +80,26 @@ struct SwiperView: View {
             offset = CGSize(width: 1000, height: 0)
         }
         
-        // After the card is swiped, replace it with the next card
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            let firstCard = cards.removeFirst()  // Remove the top card
-            cards.append(firstCard)  // Move the removed card to the back (infinite loop)
-            resetCard()  // Reset the position for the new top card
+            let firstCard = viewModel.movies.removeFirst()
+            viewModel.movies.append(firstCard)
+            resetCard()
         }
         
         isSwiped = true
     }
     
-    // Reset the card position
     func resetCard() {
         offset = .zero
         rotation = 0
     }
     
-    // Enum to define swipe directions
     enum SwipeDirection {
         case left, right
     }
 }
 
-// A simple Card view for testing (replace with your movie card later)
-
-
-  
+// Preview
 #Preview {
     SwiperView()
 }
