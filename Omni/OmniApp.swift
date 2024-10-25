@@ -11,7 +11,9 @@ import SwiftUI
 struct OmniApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            LayoutView {
+                SwiperView()
+            }
         }
     }
 }
