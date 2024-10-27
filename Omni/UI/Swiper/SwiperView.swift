@@ -41,8 +41,16 @@ struct SwiperView: View {
                                                 if abs(gesture.translation.width) > 100 {
                                                     if gesture.translation.width > 0 {
                                                         viewModel.swipeCard(to: .right)
+                                                        Task {
+                                                            await viewModel.updateEmbedding(reaction: ViewModel.Reaction.like)
+                                                            await viewModel.getNextMovie()
+                                                        }
                                                     } else {
                                                         viewModel.swipeCard(to: .left)
+                                                        Task {
+                                                            await viewModel.updateEmbedding(reaction: ViewModel.Reaction.dislike)
+                                                            await viewModel.getNextMovie()
+                                                        }
                                                     }
                                                 } else {
                                                     viewModel.resetCard()
@@ -59,11 +67,11 @@ struct SwiperView: View {
         .sheet(isPresented: $viewModel.showMovieDetails) {
             MovieDetailsView(movie: viewModel.movies[0])
         }
-        .task {
-            await viewModel.getNextMovie()
-        }
         .onAppear {
             viewModel.userData = userData
+            Task {
+                await viewModel.getNextMovie()
+            }
         }
     }
 
