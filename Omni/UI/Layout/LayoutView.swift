@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LayoutView<Content: View>: View {
+    @StateObject var userData = UserData()
     let content: Content
 
     init(@ViewBuilder content: () -> Content) {
@@ -51,15 +52,14 @@ struct LayoutView<Content: View>: View {
         switch tab {
             case .home:
                 SwiperView()
+                    .environmentObject(userData)
             case .search:
                 SearchView()
+                    .environmentObject(userData)
             case .profile:
                 UserProfileView()
+                    .environmentObject(userData)
             }
     }
 }
-
-//#Preview {
-//    LayoutView(content: () -> SwiperView())
-//}
 

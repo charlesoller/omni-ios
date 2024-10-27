@@ -2,9 +2,12 @@ import SwiftUI
 
 struct SwiperView: View {
     @Environment(\.colorScheme) var colorScheme
-    @State private var viewModel = ViewModel()
+    @EnvironmentObject var userData: UserData
 
+    @State private var viewModel = ViewModel()
+    
     var body: some View {
+
         VStack {
             ZStack {
                 ForEach(viewModel.movies, id: \.id) { movie in
@@ -52,16 +55,20 @@ struct SwiperView: View {
                 }
             }
         }
+
         .sheet(isPresented: $viewModel.showMovieDetails) {
             MovieDetailsView(movie: viewModel.movies[0])
         }
         .task {
-            await viewModel.fetchMovies()
+            await viewModel.getNextMovie()
+        }
+        .onAppear {
+            viewModel.userData = userData
         }
     }
+
 }
 
-// Preview
 #Preview {
-    SwiperView()
+    ContentView()
 }

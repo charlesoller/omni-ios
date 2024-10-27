@@ -19,4 +19,10 @@ struct MovieResource: APIResource {
     func fetchMovies() async throws -> [Movie] {
         return try await api.get(url: self.url)
     }
+    
+    func fetchMovie(id: Int) async throws -> Movie {
+        let movieUrl = self.url
+            .appendingPathComponent("\(id)")
+        return try await api.get(url: movieUrl)
+    }
 }

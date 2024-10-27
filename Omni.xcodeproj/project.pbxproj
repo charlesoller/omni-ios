@@ -12,6 +12,7 @@
 		D41730972CCE887F005F46A0 /* MovieResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D41730962CCE887F005F46A0 /* MovieResource.swift */; };
 		D41730992CCE8A32005F46A0 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D41730982CCE8A32005F46A0 /* NetworkManager.swift */; };
 		D46F16D62CCE90D5002C3D2F /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46F16D52CCE90D5002C3D2F /* SearchViewModel.swift */; };
+		D46F16D82CCE94ED002C3D2F /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46F16D72CCE94ED002C3D2F /* UserData.swift */; };
 		D4FFCD0B2CCA961D00C84DCF /* OmniApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FFCD0A2CCA961D00C84DCF /* OmniApp.swift */; };
 		D4FFCD0F2CCA961F00C84DCF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4FFCD0E2CCA961F00C84DCF /* Assets.xcassets */; };
 		D4FFCD122CCA961F00C84DCF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4FFCD112CCA961F00C84DCF /* Preview Assets.xcassets */; };
@@ -36,6 +37,7 @@
 		D41730962CCE887F005F46A0 /* MovieResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieResource.swift; sourceTree = "<group>"; };
 		D41730982CCE8A32005F46A0 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		D46F16D52CCE90D5002C3D2F /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		D46F16D72CCE94ED002C3D2F /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		D4FFCD072CCA961D00C84DCF /* Omni.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Omni.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4FFCD0A2CCA961D00C84DCF /* OmniApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmniApp.swift; sourceTree = "<group>"; };
 		D4FFCD0E2CCA961F00C84DCF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				D4FFCD382CCBFAF300C84DCF /* Movie.swift */,
+				D46F16D72CCE94ED002C3D2F /* UserData.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -318,6 +321,7 @@
 				D4FFCD2A2CCAA67900C84DCF /* BottomBarView.swift in Sources */,
 				D41730902CCDA69E005F46A0 /* APIResource.swift in Sources */,
 				D41730972CCE887F005F46A0 /* MovieResource.swift in Sources */,
+				D46F16D82CCE94ED002C3D2F /* UserData.swift in Sources */,
 				D4FFCD242CCA9D6D00C84DCF /* ColorPalette.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

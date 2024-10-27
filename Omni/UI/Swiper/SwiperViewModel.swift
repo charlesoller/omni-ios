@@ -1,9 +1,10 @@
 import Foundation
 
 extension SwiperView {
-    
     @Observable class ViewModel {
         let api = MovieResource()
+        var userData: UserData?
+        
         var movies: [Movie] = []
         var errorMessage: String?
         var scaleEffect: CGFloat = 1.0
@@ -13,6 +14,24 @@ extension SwiperView {
         
         var showMovieDetails = false
         var selectedCard: Int? = nil
+        
+        func getNextMovie() async {
+            let isAllZeros = userData?.embedding.allSatisfy{ $0 == 0.0 } ?? true
+            if (isAllZeros) {
+                await fetchMovie(id: 11)
+            } else {
+                await fetchMovie(id: 2)
+            }
+        }
+        
+        func fetchMovie(id: Int) async {
+            do {
+                let movie = try await api.fetchMovie(id: id)
+                movies = [movie]
+            } catch {
+                errorMessage = "Failed to fetch movie \(error.localizedDescription)"
+            }
+        }
         
         func fetchMovies() async {
             do {

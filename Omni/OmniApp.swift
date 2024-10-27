@@ -9,11 +9,10 @@ import SwiftUI
 
 @main
 struct OmniApp: App {
+
     var body: some Scene {
         WindowGroup {
-            LayoutView {
-                SwiperView()
-            }
+            ContentView()
         }
     }
 }
