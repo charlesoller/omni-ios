@@ -1,25 +1,13 @@
 import SwiftUI
 
 struct SearchView: View {
-    @State private var searchText: String = ""
-    @State private var selectedMovie: Movie? // Assuming you have a Movie model
-    @StateObject private var viewModel = MovieViewModel()
-
-    
-
-//    let movies: [Movie] = [
-//        Movie(title: "Movie 1"),
-//        Movie(title: "Movie 2"),
-//        Movie(title: "Movie 3"),
-//        Movie(title: "Movie 4"),
-//        Movie(title: "Movie 5")
-//    ] // Placeholder movie data
+    @State private var viewModel = ViewModel()
 
     var filteredMovies: [Movie] {
-        if searchText.isEmpty {
+        if viewModel.searchText.isEmpty {
             return []
         }
-        return viewModel.movies.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
+        return viewModel.movies.filter { $0.title.localizedCaseInsensitiveContains(viewModel.searchText) }
     }
 
     var body: some View {
@@ -31,7 +19,7 @@ struct SearchView: View {
                         .font(.largeTitle)
                         .padding()
 
-                    TextField("Search movies...", text: $searchText)
+                    TextField("Search movies...", text: $viewModel.searchText)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .padding()
                 }
@@ -43,10 +31,13 @@ struct SearchView: View {
                             .padding()
                     } else {
                         GridView(movies: filteredMovies, onSelect: { movie in
-                            selectedMovie = movie
+                            viewModel.selectedMovie = movie
                         })
                     }
                 }
+            }
+            .task {
+                await viewModel.fetchMovies()
             }
         }
     }
