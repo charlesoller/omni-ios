@@ -3,6 +3,7 @@ import Foundation
 extension SwiperView {
     @Observable class ViewModel {
         let api = MovieResource()
+        let embeddingService = EmbeddingService()
         var userData: UserData?
         var seen: [Int32] = []
         
@@ -32,47 +33,11 @@ extension SwiperView {
                 userData?.embedding = embedding
             } else {
                 if (reaction == Reaction.like) {
-                    userData?.embedding = averageEmbeddings(embedding1: userData!.embedding, embedding2: embedding)!
+                    userData?.embedding = embeddingService.moveTo(userEmbedding: userData!.embedding, likedEmbedding: embedding)!
                 } else {
-                    userData?.embedding = moveAwayFromEmbedding(userEmbedding: userData!.embedding, dislikedEmbedding: embedding)!
+                    userData?.embedding = embeddingService.moveAway(userEmbedding: userData!.embedding, dislikedEmbedding: embedding)!
                 }
             }
-        }
-        
-        func averageEmbeddings(embedding1: [Float], embedding2: [Float]) -> [Float]? {
-            // Ensure both embeddings have the same size
-            guard embedding1.count == 384, embedding2.count == 384 else {
-                print("Error: Both embeddings must have exactly 384 indices.")
-                return nil
-            }
-            
-            // Create an array to hold the averaged values
-            var averagedEmbedding = [Float](repeating: 0.0, count: 384)
-            
-            // Calculate the average for each index
-            for i in 0..<384 {
-                averagedEmbedding[i] = (embedding1[i] + embedding2[i]) / 2.0
-            }
-            
-            return averagedEmbedding
-        }
-        
-        func moveAwayFromEmbedding(userEmbedding: [Float], dislikedEmbedding: [Float], factor: Float = 0.5) -> [Float]? {
-            // Ensure both embeddings have the same size
-            guard userEmbedding.count == 384, dislikedEmbedding.count == 384 else {
-                print("Error: Both embeddings must have exactly 384 indices.")
-                return nil
-            }
-            
-            // Create an array to hold the new adjusted embedding
-            var adjustedEmbedding = [Float](repeating: 0.0, count: 384)
-            
-            // Calculate the new embedding by moving away from the disliked embedding
-            for i in 0..<384 {
-                adjustedEmbedding[i] = userEmbedding[i] - (dislikedEmbedding[i] * factor)
-            }
-            
-            return adjustedEmbedding
         }
         
         func fetchMovie(id: Int) async {

@@ -26,6 +26,14 @@ struct MovieResource: APIResource {
         return try await api.get(url: url)
     }
     
+    func fetchMovieDetails(id: Int) async throws -> MovieDetails {
+        let url = self.url
+            .appendingPathComponent("\(id)")
+            .appendingPathComponent("details")
+
+        return try await api.get(url: url)
+    }
+    
     func getSimilarMovies(embedding: [Float]) async throws -> [Movie] {
         let url = self.url
             .appendingPathComponent("embeddings")

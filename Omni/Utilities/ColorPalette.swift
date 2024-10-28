@@ -19,16 +19,16 @@ class ColorPalette {
 
     init(scheme: ColorSchemeType) {
         switch scheme {
-        case .light:
-            backgroundColor = Color.white
-            backgroundSecondaryColor = Color.gray.opacity(0.2)
-            textColor = Color.black
-            secondaryTextColor = Color.gray
-        case .dark:
-            backgroundColor = Color.black
-            backgroundSecondaryColor = Color.gray.opacity(0.8)
-            textColor = Color.white
-            secondaryTextColor = Color.gray.opacity(0.5)
+            case .light:
+                backgroundColor = Color.white
+                backgroundSecondaryColor = Color.gray.opacity(0.2)
+                textColor = Color.black
+                secondaryTextColor = Color.gray
+            case .dark:
+                backgroundColor = Color.black
+                backgroundSecondaryColor = Color.gray.opacity(0.8)
+                textColor = Color.white
+                secondaryTextColor = Color.gray.opacity(0.5)
         }
     }
 }
