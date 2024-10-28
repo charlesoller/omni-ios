@@ -20,9 +20,29 @@ struct MovieResource: APIResource {
         return try await api.get(url: self.url)
     }
     
+    func searchMovies(title: String) async throws -> [Movie] {
+        var components = URLComponents(url: self.url, resolvingAgainstBaseURL: true)
+        components?.queryItems = [
+            URLQueryItem(name: "title", value: title),
+            URLQueryItem(name: "limit", value: String(20))
+        ]
+        
+        guard let finalURL = components?.url else {
+            throw URLError(.badURL)
+        }
+
+        return try await api.get(url: finalURL)
+    }
+    
     func fetchMovie(id: Int) async throws -> Movie {
         let url = self.url
             .appendingPathComponent("\(id)")
+        return try await api.get(url: url)
+    }
+    
+    func fetchRandomMovie() async throws -> Movie {
+        let url = self.url
+            .appendingPathComponent("random")
         return try await api.get(url: url)
     }
     

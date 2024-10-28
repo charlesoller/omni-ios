@@ -27,22 +27,21 @@ class NetworkManager: APIClient {
 //            let decodedData = try JSONDecoder().decode(T.self, from: cachedResponse.data)
 //            return decodedData
 //        }
+
         let (data, response) = try await URLSession.shared.data(from: url)
-        print(data, response)
-        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
-            let cachedResponse = CachedURLResponse(response: response, data: data)
-            urlCache.storeCachedResponse(cachedResponse, for: URLRequest(url: url))
-        }
+//        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+//            let cachedResponse = CachedURLResponse(response: response, data: data)
+//            urlCache.storeCachedResponse(cachedResponse, for: URLRequest(url: url))
+//        }
         
 //      Test
-        if let test = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-            print("Decoded JSON: \(test)")
-        } else {
-            print("Failed to decode JSON into a dictionary")
-        }
+//        if let test = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+//            print("Decoded JSON: \(test)")
+//        } else {
+//            print("Failed to decode JSON into a dictionary")
+//        }
         
         let decodedData = try JSONDecoder().decode(T.self, from: data)
-        print(decodedData)
         return decodedData
     }
 

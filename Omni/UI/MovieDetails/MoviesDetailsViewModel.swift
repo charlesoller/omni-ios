@@ -17,7 +17,6 @@ extension MovieDetailsView {
             do {
                 movieDetails = try await api.fetchMovieDetails(id: id)
             } catch {
-                print(error.localizedDescription)
                 errorMessage = "Failed to fetch movie \(error.localizedDescription)"
             }
         }

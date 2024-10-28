@@ -20,7 +20,7 @@ extension SwiperView {
         func getNextMovie() async {
             let isAllZeros = userData?.embedding.allSatisfy{ $0 == 0.0 } ?? true
             if (isAllZeros) {
-                await fetchMovie(id: 11)
+                await getRandomMovie()
             } else {
                 await getSimilarMovies()
             }
@@ -40,18 +40,10 @@ extension SwiperView {
             }
         }
         
-        func fetchMovie(id: Int) async {
+        func getRandomMovie() async {
             do {
-                let movie = try await api.fetchMovie(id: id)
+                let movie = try await api.fetchRandomMovie()
                 movies = [movie]
-            } catch {
-                errorMessage = "Failed to fetch movie \(error.localizedDescription)"
-            }
-        }
-        
-        func fetchMovies() async {
-            do {
-                movies = try await api.fetchMovies()
             } catch {
                 errorMessage = "Failed to load movies: \(error.localizedDescription)"
             }

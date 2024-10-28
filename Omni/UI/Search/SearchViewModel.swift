@@ -12,14 +12,23 @@ extension SearchView {
         let api = MovieResource()
         var errorMessage: String?
         var movies: [Movie] = []
-        var searchText: String = ""
         var selectedMovie: Movie?
+        var searchText: String = "" {
+            didSet {
+                Task { await searchMovies() }
+            }
+        }
         
-        func fetchMovies() async {
+        func searchMovies() async {
+            guard !searchText.isEmpty else {
+                movies = []
+                return
+            }
+            
             do {
-                movies = try await api.fetchMovies()
+                movies = try await api.searchMovies(title: searchText)
             } catch {
-                errorMessage = "Failed to load movies: \(error.localizedDescription)"
+                errorMessage = "Failed to search movies: \(error.localizedDescription)"
             }
         }
     }
